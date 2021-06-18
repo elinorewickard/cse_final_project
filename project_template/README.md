@@ -1,5 +1,5 @@
 # [PROGRAM NAME] 
-[a description of the program]
+A game where the play avoids objects to stay alive through various backround layers.
 
 ## Getting Started
 ---
@@ -22,8 +22,9 @@ root                    (project root folder)
 
 ## Required Technologies
 ---
-[list required libraries]
+arcade
 
 ## Authors
 ---
 David Swearingen - davidrs@byui.edu
+Elinore Wickard - ewick@byui.edu
