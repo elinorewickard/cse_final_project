@@ -28,3 +28,4 @@ arcade
 ---
 David Swearingen - davidrs@byui.edu
 Elinore Wickard - ewick@byui.edu
+David Wells - davidwells@byui.edu 
