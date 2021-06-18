@@ -6,4 +6,23 @@ Main Scene
   background info
   
  Game Scene
+  Player controlled object
+  Angery fireball following player
+  collision detection
+  timer
+  pause button
+  objects in the way 
+  
+Win Scene
+  You win 
+  restart button
+  exit button
+
+Game over Scene
+  You Lose
+  Play again Button
+  Exit button
+  
+ 
+  
   
