@@ -1,27 +1,27 @@
 Game overview 
 
 Main Scene
-  play button
-  exit button
-  background info
+  play button 2
+  exit button 2
+  background info 2
   
  Game Scene
-  Player controlled object
-  Angery fireball following player
-  collision detection
-  timer
-  pause button
-  objects in the way 
+  Player controlled object 1
+  Angery fireball following player 1
+  collision detection 1
+  timer 1
+  pause button 1
+  objects in the way  1
   
 Win Scene
-  You win 
-  restart button
-  exit button
+  You win  1
+  restart button 1
+  exit button 1
 
 Game over Scene
-  You Lose
-  Play again Button
-  Exit button
+  You Lose 1
+  Play again Button 1
+  Exit button 1
   
  
   
