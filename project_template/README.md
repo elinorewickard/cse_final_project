@@ -26,4 +26,4 @@ root                    (project root folder)
 
 ## Authors
 ---
-[list author names and emails]
+David Swearingen - davidrs@byui.edu
