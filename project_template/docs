@@ -1,28 +1,6 @@
-Game overview 
-
-Main Scene
-  play button 2
-  exit button 2
-  background info 2
-  
- Game Scene
-  Player controlled object 1
-  Angery fireball following player 1
-  collision detection 1
-  timer 1
-  pause button 1
-  objects in the way  1
-  
-Win Scene
-  You win  1
-  restart button 1
-  exit button 1
-
-Game over Scene
-  You Lose 1
-  Play again Button 1
-  Exit button 1
-  
- 
-  
-  
+**learn how to control layers
+use random module, as x increases, objects will become more frequent, with a new object added every nth coordinate
+occasionally changes direction 
+one-hit kill
+cliffs, yes, you can fall to your death
+backstory: angered a witch
