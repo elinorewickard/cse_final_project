@@ -1,4 +1,4 @@
-import arcarde
+import arcade
 
 # Constants for window
 SCREEN_WIDTH = 1000
@@ -17,3 +17,12 @@ BOTTOM_VIEWPORT_MARGIN = 50
 TOP_VIEWPORT_MARGIN = 100
 
 # program entry point
+
+def main():
+   """ Main method """
+   window = MyGame()
+   window.setup()
+   arcade.run()
+
+if __name__ == "__main__":
+   main()
