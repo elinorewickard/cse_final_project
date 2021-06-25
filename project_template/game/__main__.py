@@ -21,7 +21,7 @@ TOP_VIEWPORT_MARGIN = 100
 PATH = os.path.dirname(os.path.abspath(__file__))
 CHAR_IMG = os.path.join(PATH, 'assets/boxman.png')
 BACKGR_IMG = os.path.join(PATH, 'assets/background.png')
-#BRICK_IMAGE = os.path.join(PATH, '..', 'images', 'brick-0.png')
+GRASS_IMG = os.path.join(PATH, 'assets/grass.png')
 
 # program entry point
 class Setup(arcade.Window):
@@ -31,7 +31,7 @@ class Setup(arcade.Window):
       super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
       
       self.player_list = arcade.SpriteList()
-      self.block_list = arcade.SpriteList(use_spatial_hash=True)
+      self.block_list = arcade.SpriteList()#use_spatial_hash=True)
       self.layer_list = arcade.SpriteList()
 
       #separate variable for player sprite
@@ -52,10 +52,20 @@ class Setup(arcade.Window):
       self.background.center_x = SCREEN_WIDTH/2
       self.layer_list.append(self.background)
 
+      for i in range(int(SCREEN_WIDTH/(32*SCALING) + 1)):
+         self.add_block(i)
+
+   def add_block(self,i):
+      self.grass = arcade.Sprite(GRASS_IMG, SCALING)
+      self.grass.left = 32 * i * SCALING
+      self.grass.bottom = 0
+      self.block_list.append(self.grass)
+
    def on_draw(self):
       """Render the screen."""
       arcade.start_render()
       self.layer_list.draw()
+      self.block_list.draw()
       self.player_list.draw()
 
    def on_key_press(self, key, modifiers):
@@ -79,9 +89,15 @@ class Setup(arcade.Window):
          self.player.change_x = 0
 
    def on_update(self, delta_time: float):
+
       for sprite in self.player_list:
+         if not sprite.collides_with_list(self.block_list):
             sprite.center_x = float(sprite.center_x + sprite.change_x * delta_time)
             sprite.center_y = float(sprite.center_y + sprite.change_y * delta_time)
+         else:
+            for block in self.block_list:
+               if sprite.bottom < block.top and sprite.bottom >= block.bottom:
+                  sprite.bottom = block.top + 1
 
       if self.player.top > self.height:
          self.player.top = self.height
