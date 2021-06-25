@@ -11,7 +11,7 @@ The project files and folders are organized as follows:
 ```
 root                    (project root folder)
 +-- docs                (project documentation)
-+-- rename              [src code files - rename for project]
++-- game              [src code files]
   +-- assets            (program asset files)
   +-- data              (program data files)
   +-- __init__.py       (python package file)
@@ -27,5 +27,5 @@ arcade
 ## Authors
 ---
 David Swearingen - davidrs@byui.edu
-Elinore Wickard - ewick@byui.edu
+Elinore Wickard - ewickard@byui.edu
 David Wells - davidwells@byui.edu 
