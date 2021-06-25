@@ -7,9 +7,9 @@ SCREEN_TITLE = "Vengeance"
 
 # player constants
 GRAVITY = 1
-PLAYER_MOVEMENT_SPEED = 5
+PLAYER_MOVEMENT_SPEED = 500
 PLAYER_JUMP_SPEED = 20
-SCALING = 2.0
+SCALING = 3.0
 
 # margin minimum between character and screen edge
 LEFT_VIEWPORT_MARGIN = 250
@@ -20,7 +20,7 @@ TOP_VIEWPORT_MARGIN = 100
 # character reference for file-finding
 PATH = os.path.dirname(os.path.abspath(__file__))
 CHAR_IMG = os.path.join(PATH, 'assets/boxman.png')
-#PADDLE_IMAGE = os.path.join(PATH, '..', 'images', 'paddle-0.png')
+BACKGR_IMG = os.path.join(PATH, 'assets/background.png')
 #BRICK_IMAGE = os.path.join(PATH, '..', 'images', 'brick-0.png')
 
 # program entry point
@@ -35,23 +35,62 @@ class Setup(arcade.Window):
       self.layer_list = arcade.SpriteList()
 
       #separate variable for player sprite
-      self.player_sprite = arcade.Sprite()
+      self.player = arcade.Sprite()
 
       arcade.set_background_color(arcade.csscolor.GREEN)
 
    def startup(self):
       """set up game here, if called it will restart the game"""
       
-      self.player_sprite = arcade.Sprite(CHAR_IMG, SCALING)
-      self.player_sprite.center_y = SCREEN_HEIGHT/2
-      self.player_sprite.center_x = SCREEN_WIDTH/2
-      self.player_list.append(self.player_sprite)
+      self.player = arcade.Sprite(CHAR_IMG, SCALING)
+      self.player.center_y = SCREEN_HEIGHT/2
+      self.player.center_x = SCREEN_WIDTH/2
+      self.player_list.append(self.player)
+
+      self.background = arcade.Sprite(BACKGR_IMG)
+      self.background.center_y = SCREEN_HEIGHT/2
+      self.background.center_x = SCREEN_WIDTH/2
+      self.layer_list.append(self.background)
 
    def on_draw(self):
       """Render the screen."""
       arcade.start_render()
+      self.layer_list.draw()
       self.player_list.draw()
 
+   def on_key_press(self, key, modifiers):
+      """Called whenever a key is pressed. """
+
+      if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
+         self.player.change_y = PLAYER_MOVEMENT_SPEED
+      if key == arcade.key.DOWN or key == arcade.key.S:
+         self.player.change_y = -PLAYER_MOVEMENT_SPEED
+      if key == arcade.key.LEFT or key == arcade.key.A:
+         self.player.change_x = -PLAYER_MOVEMENT_SPEED
+      if key == arcade.key.RIGHT or key == arcade.key.D:
+         self.player.change_x = PLAYER_MOVEMENT_SPEED
+
+   def on_key_release(self, key, modifiers):
+      """Called when the user releases a key. """
+
+      if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.DOWN or key == arcade.key.S:
+         self.player.change_y = 0
+      if key == arcade.key.LEFT or key == arcade.key.A or key == arcade.key.RIGHT or key == arcade.key.D:
+         self.player.change_x = 0
+
+   def on_update(self, delta_time: float):
+      for sprite in self.player_list:
+            sprite.center_x = float(sprite.center_x + sprite.change_x * delta_time)
+            sprite.center_y = float(sprite.center_y + sprite.change_y * delta_time)
+
+      if self.player.top > self.height:
+         self.player.top = self.height
+      if self.player.right > self.width:
+         self.player.right = self.width
+      if self.player.bottom < 0:
+         self.player.bottom = 0
+      if self.player.left < 0:
+         self.player.left = 0
 
 def main():
    """ Main method, runs the game when called. """
