@@ -4,3 +4,13 @@ occasionally changes direction
 one-hit kill
 cliffs, yes, you can fall to your death
 backstory: angered a witch
+
+CLASSES:
+• Collision - D. Wells
+• Gravity - D. Wells
+• Actor
+• Layer(arcade.Actor)
+• Input
+• Output
+• Vengeance(arcade.Window)
+• OrderDraw
