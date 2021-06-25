@@ -14,3 +14,28 @@ CLASSES:
 • Output
 • Vengeance(arcade.Window)
 • OrderDraw
+
+Game overview / Priorities
+
+Main Scene
+  play button 2
+  exit button 2
+  background info 2
+
+ Game Scene 
+  Player controlled object 1
+  Angery fireball following player 1
+  collision detection 1
+  timer 2
+  pause button 2
+  objects in the way  1
+
+Win Scene
+  You win  1
+  restart button 2
+  exit button 1
+
+Game over Scene
+  You Lose 1
+  Play again Button 2
+  Exit button 1
