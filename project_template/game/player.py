@@ -4,7 +4,7 @@ class player(object):
 
  
  
- def on_key_press(self, key, modifiers):
+    def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
 
         if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
