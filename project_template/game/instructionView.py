@@ -9,7 +9,7 @@ class InstructionView(arcade.View):
     
     def on_show(self):
       """This runs when we switch to this view."""
-      arcade.set_background_color(arcade.csscolor.GREEN)
+      arcade.set_background_color([100, 100, 100, 0])
       #resets the viewport for scrolling game
       arcade.set_viewport(0, c.SCREEN_WIDTH - 1, 0, c.SCREEN_HEIGHT - 1)
 

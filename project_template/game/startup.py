@@ -7,8 +7,8 @@ class Startup(arcade.View):
       """"class constructor. Sets up the window."""
       super().__init__()
       
-      # self.height = 1
-      # self.width = 1
+      # self.height = 0
+      # self.width = 0
       
       self.player_list = arcade.SpriteList()
       self.block_list = arcade.SpriteList()#use_spatial_hash=True)
@@ -78,10 +78,10 @@ class Startup(arcade.View):
                if sprite.bottom < block.top and sprite.bottom >= block.bottom:
                   sprite.bottom = block.top + 1
 
-      if self.player.top > self.height:
-         self.player.top = self.height
-      if self.player.right > self.width:
-         self.player.right = self.width
+      if self.player.top > self.window.height:
+         self.player.top = self.window.height
+      if self.player.right > self.window.width:
+         self.player.right = self.window.width
       if self.player.bottom < 0:
          self.player.bottom = 0
       if self.player.left < 0:
