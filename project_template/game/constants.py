@@ -6,7 +6,7 @@ SCREEN_TITLE = "Vengeance"
 
 # player constants
 GRAVITY = 1
-PLAYER_MOVEMENT_SPEED = 500
+PLAYER_MOVEMENT_SPEED = 250
 PLAYER_JUMP_SPEED = 20
 SCALING = 3.0
 
@@ -20,4 +20,5 @@ TOP_VIEWPORT_MARGIN = 100
 PATH = os.path.dirname(os.path.abspath(__file__))
 CHAR_IMG = os.path.join(PATH, 'assets/boxman.png')
 BACKGR_IMG = os.path.join(PATH, 'assets/background.png')
-GRASS_IMG = os.path.join(PATH, 'assets/grass.png')
+GRASS_IMG = os.path.join(PATH, 'assets/field.png')
+GRASS_HB_IMG = os.path.join(PATH, 'assets/field-hb.png')
