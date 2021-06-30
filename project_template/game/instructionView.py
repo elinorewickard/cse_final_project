@@ -9,16 +9,16 @@ class InstructionView(arcade.View):
     
     def on_show(self):
       """This runs when we switch to this view."""
-      arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+      arcade.set_background_color(arcade.csscolor.GREEN)
       #resets the viewport for scrolling game
       arcade.set_viewport(0, c.SCREEN_WIDTH - 1, 0, c.SCREEN_HEIGHT - 1)
 
     def on_draw(self):
         """ Draw this view """
         arcade.start_render()
-        arcade.draw_text("Instructions Screen", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2,
+        arcade.draw_text("Starting Screen", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2,
                          arcade.color.WHITE, font_size=50, anchor_x="center")
-        arcade.draw_text("Click to advance", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2-75,
+        arcade.draw_text("Click to continue...", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2-75,
                          arcade.color.WHITE, font_size=20, anchor_x="center")
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):

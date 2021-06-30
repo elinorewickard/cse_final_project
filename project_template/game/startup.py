@@ -7,6 +7,9 @@ class Startup(arcade.View):
       """"class constructor. Sets up the window."""
       super().__init__()
       
+      # self.height = 1
+      # self.width = 1
+      
       self.player_list = arcade.SpriteList()
       self.block_list = arcade.SpriteList()#use_spatial_hash=True)
       self.layer_list = arcade.SpriteList()
