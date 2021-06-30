@@ -34,6 +34,9 @@ class Startup(arcade.View):
 
       for i in range(int(c.SCREEN_WIDTH/(32*c.SCALING) + 1)):
          self.add_block(i)
+      
+      self.view_bottom = 0
+      self.view_left = 0
 
    def add_block(self,i):
       """Adds blocks to screen, currently it is grass."""
@@ -86,3 +89,42 @@ class Startup(arcade.View):
          self.player.bottom = 0
       if self.player.left < 0:
          self.player.left = 0
+
+      changed = False
+
+
+      left_boundary = self.view_left + c.LEFT_VIEWPORT_MARGIN
+      if self.player.left < left_boundary:
+         self.view_left -= left_boundary - self.player.left
+         changed = True
+
+
+        # Scroll right
+      right_boundary = self.view_left + c.SCREEN_WIDTH - c.RIGHT_VIEWPORT_MARGIN
+      if self.player.right > right_boundary:
+         self.view_left += self.player.right - right_boundary
+         changed = True
+
+        # Scroll up
+      top_boundary = self.view_bottom + c.SCREEN_HEIGHT - c.TOP_VIEWPORT_MARGIN
+      if self.player.top > top_boundary:
+         self.view_bottom += self.player.top - top_boundary
+         changed = True
+
+        # Scroll down
+      bottom_boundary = self.view_bottom + c.BOTTOM_VIEWPORT_MARGIN
+      if self.player.bottom < bottom_boundary:
+         self.view_bottom -= bottom_boundary - self.player.bottom
+         changed = True
+
+      if changed:
+            # Only scroll to integers. Otherwise we end up with pixels that
+            # don't line up on the screen
+         self.view_bottom = int(self.view_bottom)
+         self.view_left = int(self.view_left)
+
+            # Do the scrolling
+         arcade.set_viewport(self.view_left,
+                              c.SCREEN_WIDTH + self.view_left,
+                              self.view_bottom,
+                              c.SCREEN_HEIGHT + self.view_bottom)
