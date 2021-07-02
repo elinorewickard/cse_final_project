@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 import constants as c
-=======
->>>>>>> 1397b452d6b8c0c73f3c56491bc611a23ebfcf0a
 import arcade
 from startup import Startup
 from instructionView import InstructionView
