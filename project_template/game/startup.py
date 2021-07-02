@@ -6,10 +6,7 @@ class Startup(arcade.View):
    def __init__(self):
       """"class constructor. Sets up the window."""
       super().__init__()
-      
-      # self.height = 0
-      # self.width = 0
-      
+
       self.player_list = arcade.SpriteList()
       self.block_list = arcade.SpriteList()#use_spatial_hash=True)
       self.hitbox_list = arcade.SpriteList()
@@ -34,7 +31,7 @@ class Startup(arcade.View):
       self.background.center_x = c.SCREEN_WIDTH/2
       self.layer_list.append(self.background)
 
-<<<<<<< HEAD:project_template/game/startup.py
+
       for i in range(int(c.SCREEN_WIDTH/(32*c.SCALING) + 1)):
          self.add_block(i)
       
@@ -47,7 +44,7 @@ class Startup(arcade.View):
       self.grass.left = 32 * i * c.SCALING
       self.grass.bottom = 0
       self.block_list.append(self.grass)
-=======
+
       for i in range(0,2):   
          self.add_block(i,c.GRASS_IMG,self.block_list)
          self.add_block(i,c.GRASS_HB_IMG,self.hitbox_list)
@@ -58,7 +55,7 @@ class Startup(arcade.View):
       self.block.left = 256 * i * c.SCALING
       self.block.bottom = 0
       typelist.append(self.block)
->>>>>>> 1397b452d6b8c0c73f3c56491bc611a23ebfcf0a:project_template/game/setup.py
+
 
    def on_draw(self):
       """Render the c.SCREEN."""
