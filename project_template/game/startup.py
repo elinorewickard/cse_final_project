@@ -14,12 +14,15 @@ class Startup(arcade.View):
       self.block_list = arcade.SpriteList()#use_spatial_hash=True)
       self.hitbox_list = arcade.SpriteList()
       self.layer_list = arcade.SpriteList()
+      self.wall_list = arcade.SpriteList(use_spatial_hash=True)
 
       #separate variable for player sprite
       self.player = arcade.Sprite()
 
       arcade.set_background_color(arcade.csscolor.GREEN)
       arcade.set_background_color((100,100,100,50))
+
+      self.physics_engine = None
 
    def setup(self):
       """set up game here, if called it will restart the game."""
@@ -40,6 +43,19 @@ class Startup(arcade.View):
       
       self.view_bottom = 0
       self.view_left = 0
+
+      
+      self.physics_engine = arcade.PhysicsEnginePlatformer(self.player,
+                                                             self.wall_list,
+                                                             c.GRAVITY)
+
+      for x in range(0, 1250, 64):
+            wall = arcade.Sprite(c.GRASS_IMG)
+            wall.center_x = x
+            wall.center_y = 32
+            self.wall_list.append(wall)
+
+
 
    def add_block(self,i):
       """Adds blocks to screen, currently it is grass."""
@@ -71,7 +87,8 @@ class Startup(arcade.View):
    def on_key_press(self, key, modifiers):
       """Called whenever a key is pressed."""
       if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
-         self.player.change_y = c.PLAYER_MOVEMENT_SPEED
+         if self.physics_engine.can_jump():
+            self.player.change_y = c.PLAYER_JUMP_SPEED
       if key == arcade.key.DOWN or key == arcade.key.S:
          self.player.change_y = -c.PLAYER_MOVEMENT_SPEED
       if key == arcade.key.LEFT or key == arcade.key.A:
@@ -92,11 +109,15 @@ class Startup(arcade.View):
          if not sprite.collides_with_list(self.hitbox_list):
             sprite.center_x = float(sprite.center_x + sprite.change_x * delta_time)
             sprite.center_y = float(sprite.center_y + sprite.change_y * delta_time)
+<<<<<<< HEAD
          else:
             for block in self.hitbox_list:
                if sprite.bottom < block.top and sprite.bottom >= block.bottom:
                   sprite.bottom = block.top + 1
 
+=======
+        
+>>>>>>> be1eb5ffe2798c2a2816f3a49c2464218b3d0bd2
       if self.player.top > self.window.height:
          self.player.top = self.window.height
       if self.player.right > self.window.width:
@@ -144,3 +165,8 @@ class Startup(arcade.View):
                               c.SCREEN_WIDTH + self.view_left,
                               self.view_bottom,
                               c.SCREEN_HEIGHT + self.view_bottom)
+
+      
+      
+      
+      self.physics_engine.update()
