@@ -6,7 +6,11 @@ SCREEN_TITLE = "Vengeance"
 
 # player constants
 GRAVITY = 1
+<<<<<<< HEAD
 PLAYER_MOVEMENT_SPEED = 250
+=======
+PLAYER_MOVEMENT_SPEED = 20
+>>>>>>> be1eb5ffe2798c2a2816f3a49c2464218b3d0bd2
 PLAYER_JUMP_SPEED = 20
 SCALING = 3.0
 
