@@ -12,12 +12,14 @@ class Startup(arcade.View):
       
       self.player_list = arcade.SpriteList()
       self.block_list = arcade.SpriteList()#use_spatial_hash=True)
+      self.hitbox_list = arcade.SpriteList()
       self.layer_list = arcade.SpriteList()
 
       #separate variable for player sprite
       self.player = arcade.Sprite()
 
       arcade.set_background_color(arcade.csscolor.GREEN)
+      arcade.set_background_color((100,100,100,50))
 
    def setup(self):
       """set up game here, if called it will restart the game."""
@@ -32,6 +34,7 @@ class Startup(arcade.View):
       self.background.center_x = c.SCREEN_WIDTH/2
       self.layer_list.append(self.background)
 
+<<<<<<< HEAD:project_template/game/startup.py
       for i in range(int(c.SCREEN_WIDTH/(32*c.SCALING) + 1)):
          self.add_block(i)
       
@@ -44,13 +47,26 @@ class Startup(arcade.View):
       self.grass.left = 32 * i * c.SCALING
       self.grass.bottom = 0
       self.block_list.append(self.grass)
+=======
+      for i in range(0,2):   
+         self.add_block(i,c.GRASS_IMG,self.block_list)
+         self.add_block(i,c.GRASS_HB_IMG,self.hitbox_list)
+
+   def add_block(self,i,IMG,typelist):
+      
+      self.block = arcade.Sprite(IMG, c.SCALING)
+      self.block.left = 256 * i * c.SCALING
+      self.block.bottom = 0
+      typelist.append(self.block)
+>>>>>>> 1397b452d6b8c0c73f3c56491bc611a23ebfcf0a:project_template/game/setup.py
 
    def on_draw(self):
       """Render the c.SCREEN."""
       arcade.start_render()
       self.layer_list.draw()
-      self.block_list.draw()
+      #hitbox_list does not get printed
       self.player_list.draw()
+      self.block_list.draw()
 
    def on_key_press(self, key, modifiers):
       """Called whenever a key is pressed."""
@@ -73,11 +89,11 @@ class Startup(arcade.View):
    def on_update(self, delta_time: float):
       """updates where player is and tracks collisons."""
       for sprite in self.player_list:
-         if not sprite.collides_with_list(self.block_list):
+         if not sprite.collides_with_list(self.hitbox_list):
             sprite.center_x = float(sprite.center_x + sprite.change_x * delta_time)
             sprite.center_y = float(sprite.center_y + sprite.change_y * delta_time)
          else:
-            for block in self.block_list:
+            for block in self.hitbox_list:
                if sprite.bottom < block.top and sprite.bottom >= block.bottom:
                   sprite.bottom = block.top + 1
 
