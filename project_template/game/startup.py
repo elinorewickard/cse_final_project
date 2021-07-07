@@ -18,6 +18,8 @@ class Startup(arcade.View):
       arcade.set_background_color(arcade.csscolor.GREEN)
       arcade.set_background_color((100,100,100,50))
 
+      self.physics_engine = None
+
    def setup(self):
       """set up game here, if called it will restart the game."""
       
@@ -41,8 +43,7 @@ class Startup(arcade.View):
       block_list_on_layer = self.layers.get_block_list(self.player.layer)
       self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
 
-   def add_block(self,i,layer):
-      """Adds blocks to screen, currently it is grass."""
+   def add_block(self,i,layer):blocks to screen, currently it is grass."""
       LAYER_SCALING = c.SCALING/((layer+1)/3 + 2/3)
       self.grass = LayerSprite(c.GRASS_IMG, LAYER_SCALING)
       self.grass.set_hit_box(((-128,-16),(128,-16),(128,-4),(-128,-4)))
@@ -51,7 +52,6 @@ class Startup(arcade.View):
       self.grass.layer = layer
       self.block_list.append(self.grass)
       self.layers.add_block(self.grass)
-
    def on_draw(self):
       """Render c.SCREEN."""
       arcade.start_render()
@@ -94,7 +94,6 @@ class Startup(arcade.View):
       if self.player.bottom < self.player.layer * c.LAYER_WIDTH:
          self.player.bottom = self.player.layer * c.LAYER_WIDTH
       self.physics_engine.update()
-
       if self.player.top > self.window.height:
          self.player.top = self.window.height
       if self.player.right > 2000:
@@ -141,4 +140,8 @@ class Startup(arcade.View):
          arcade.set_viewport(self.view_left,
                               c.SCREEN_WIDTH + self.view_left,
                               self.view_bottom,
-                              c.SCREEN_HEIGHT + self.view_bottom)
+                              c.SCREEN_HEIGHT + self.view_bottom)      
+      
+      
+      self.physics_engine.update()
+
