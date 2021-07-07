@@ -3,10 +3,11 @@ import os
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Vengeance"
+LAYER_WIDTH = 30
 
 # player constants
 GRAVITY = 1
-PLAYER_MOVEMENT_SPEED = 250
+PLAYER_MOVEMENT_SPEED = 20
 PLAYER_JUMP_SPEED = 20
 SCALING = 3.0
 
@@ -22,3 +23,4 @@ CHAR_IMG = os.path.join(PATH, 'assets/boxman.png')
 BACKGR_IMG = os.path.join(PATH, 'assets/background.png')
 GRASS_IMG = os.path.join(PATH, 'assets/field.png')
 GRASS_HB_IMG = os.path.join(PATH, 'assets/field-hb.png')
+NULL_IMG = os.path.join(PATH, 'assets/null.png')
