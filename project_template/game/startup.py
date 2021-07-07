@@ -43,7 +43,8 @@ class Startup(arcade.View):
       block_list_on_layer = self.layers.get_block_list(self.player.layer)
       self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
 
-   def add_block(self,i,layer):blocks to screen, currently it is grass."""
+   def add_block(self,i,layer):
+      """blocks to screen, currently it is grass."""
       LAYER_SCALING = c.SCALING/((layer+1)/3 + 2/3)
       self.grass = LayerSprite(c.GRASS_IMG, LAYER_SCALING)
       self.grass.set_hit_box(((-128,-16),(128,-16),(128,-4),(-128,-4)))
