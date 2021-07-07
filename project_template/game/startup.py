@@ -1,5 +1,7 @@
 import arcade
 import constants as c
+from layersprite import LayerSprite
+from layerwork import LayerWork
 
 class Startup(arcade.View):
    """Setting up game. """
@@ -7,15 +9,12 @@ class Startup(arcade.View):
       """"class constructor. Sets up the window."""
       super().__init__()
 
-      self.player_list = arcade.SpriteList()
-      self.block_list = arcade.SpriteList()#use_spatial_hash=True)
-      self.hitbox_list = arcade.SpriteList()
-      self.layer_list = arcade.SpriteList()
-      self.wall_list = arcade.SpriteList(use_spatial_hash=True)
+      self.mob_list = arcade.SpriteList()
+      self.block_list = arcade.SpriteList()
+      self.layers = LayerWork()
 
       #separate variable for player sprite
       self.player = arcade.Sprite()
-
       arcade.set_background_color(arcade.csscolor.GREEN)
       arcade.set_background_color((100,100,100,50))
 
@@ -24,74 +23,65 @@ class Startup(arcade.View):
    def setup(self):
       """set up game here, if called it will restart the game."""
       
-      self.player = arcade.Sprite(c.CHAR_IMG, c.SCALING)
+      self.player = LayerSprite(c.CHAR_IMG, c.SCALING)
       self.player.center_y = c.SCREEN_HEIGHT/2
       self.player.center_x = c.SCREEN_WIDTH/2
-      self.player_list.append(self.player)
+      self.mob_list.append(self.player)
+      self.layers.add_sprite(self.player, "player")
 
-      self.background = arcade.Sprite(c.BACKGR_IMG)
+      self.background = LayerSprite(c.BACKGR_IMG) #will always be printed first
       self.background.center_y = c.SCREEN_HEIGHT/2
       self.background.center_x = c.SCREEN_WIDTH/2
-      self.layer_list.append(self.background)
 
-
-      for i in range(int(c.SCREEN_WIDTH/(32*c.SCALING) + 1)):
-         self.add_block(i)
+      for layer in range(0,6):
+         for i in range(int(c.SCREEN_WIDTH/(256*c.SCALING) + 10)):
+            self.add_block(i,layer)
       
       self.view_bottom = 0
       self.view_left = 0
 
-      
-      self.physics_engine = arcade.PhysicsEnginePlatformer(self.player,
-                                                             self.wall_list,
-                                                             c.GRAVITY)
+      block_list_on_layer = self.layers.get_block_list(self.player.layer)
+      self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
 
-      for x in range(0, 1250, 64):
-            wall = arcade.Sprite(c.GRASS_IMG)
-            wall.center_x = x
-            wall.center_y = 32
-            self.wall_list.append(wall)
-
-
-
-   def add_block(self,i):
-      """Adds blocks to screen, currently it is grass."""
-      self.grass = arcade.Sprite(c.GRASS_IMG, c.SCALING)
-      self.grass.left = 32 * i * c.SCALING
-      self.grass.bottom = 0
+   def add_block(self,i,layer):blocks to screen, currently it is grass."""
+      LAYER_SCALING = c.SCALING/((layer+1)/3 + 2/3)
+      self.grass = LayerSprite(c.GRASS_IMG, LAYER_SCALING)
+      self.grass.set_hit_box(((-128,-16),(128,-16),(128,-4),(-128,-4)))
+      self.grass.left = 256 * i * LAYER_SCALING
+      self.grass.bottom = layer * c.LAYER_WIDTH
+      self.grass.layer = layer
       self.block_list.append(self.grass)
-
-      for i in range(0,2):   
-         self.add_block(i,c.GRASS_IMG,self.block_list)
-         self.add_block(i,c.GRASS_HB_IMG,self.hitbox_list)
-
-   def add_block(self,i,IMG,typelist):
-      
-      self.block = arcade.Sprite(IMG, c.SCALING)
-      self.block.left = 256 * i * c.SCALING
-      self.block.bottom = 0
-      typelist.append(self.block)
-
-
+      self.layers.add_block(self.grass)
    def on_draw(self):
-      """Render the c.SCREEN."""
+      """Render c.SCREEN."""
       arcade.start_render()
-      self.layer_list.draw()
-      #hitbox_list does not get printed
-      self.player_list.draw()
-      self.block_list.draw()
+      self.background.draw()
+      for layer in range(self.layers.length()):
+         self.layers.get_block_list(layer).draw()
+         self.layers.get_mob_list(layer).draw()
 
    def on_key_press(self, key, modifiers):
       """Called whenever a key is pressed."""
-      if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
-         if self.physics_engine.can_jump():
-            self.player.change_y = c.PLAYER_JUMP_SPEED
-      if key == arcade.key.DOWN or key == arcade.key.S:
-         self.player.change_y = -c.PLAYER_MOVEMENT_SPEED
+      if key == arcade.key.UP or key == arcade.key.W:
+         self.player.push_layer()
+         self.player.bottom = c.LAYER_WIDTH * self.player.layer
+         self.player._set_scale(c.SCALING/((self.player.layer+1)/3 + 2/3))
+         block_list_on_layer = self.layers.get_block_list(self.player.layer)
+         self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
+      elif key == arcade.key.DOWN or key == arcade.key.S:
+         if self.player.layer > 0:
+            self.player.pull_layer()
+            self.player._set_scale(c.SCALING/((self.player.layer+1)/3 + 2/3))
+            self.player.bottom = -c.LAYER_WIDTH * self.player.layer
+            block_list_on_layer = self.layers.get_block_list(self.player.layer)
+            self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
       if key == arcade.key.LEFT or key == arcade.key.A:
          self.player.change_x = -c.PLAYER_MOVEMENT_SPEED
-      if key == arcade.key.RIGHT or key == arcade.key.D:
+      elif key == arcade.key.RIGHT or key == arcade.key.D:
          self.player.change_x = c.PLAYER_MOVEMENT_SPEED
+      '''if arcade.key.SPACE:
+         if self.physics_engine.can_jump():
+                self.player.change_y = c.PLAYER_JUMP_SPEED'''
 
    def on_key_release(self, key, modifiers):
       """Called when the user releases a key."""
@@ -101,16 +91,13 @@ class Startup(arcade.View):
          self.player.change_x = 0
 
    def on_update(self, delta_time: float):
-      """updates where player is and tracks collisons."""
-      for sprite in self.player_list:
-         if not sprite.collides_with_list(self.hitbox_list):
-            sprite.center_x = float(sprite.center_x + sprite.change_x * delta_time)
-            sprite.center_y = float(sprite.center_y + sprite.change_y * delta_time)
-
+      if self.player.bottom < self.player.layer * c.LAYER_WIDTH:
+         self.player.bottom = self.player.layer * c.LAYER_WIDTH
+      self.physics_engine.update()
       if self.player.top > self.window.height:
          self.player.top = self.window.height
-      if self.player.right > self.window.width:
-         self.player.right = self.window.width
+      if self.player.right > 2000:
+         self.player.right = 2000
       if self.player.bottom < 0:
          self.player.bottom = 0
       if self.player.left < 0:
