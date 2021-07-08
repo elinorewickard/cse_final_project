@@ -9,31 +9,29 @@ class Startup(arcade.View):
       """"class constructor. Sets up the window."""
       super().__init__()
 
-      self.mob_list = arcade.SpriteList()
-      self.block_list = arcade.SpriteList()
       self.layers = LayerWork()
 
       #separate variable for player sprite
       self.player = arcade.Sprite()
-      arcade.set_background_color(arcade.csscolor.GREEN)
+      arcade.set_background_color(arcade.csscolor.BLACK)
       arcade.set_background_color((100,100,100,50))
 
    def setup(self):
       """set up game here, if called it will restart the game."""
       
-      self.player = LayerSprite(c.CHAR_IMG, c.SCALING)
+      self.player = LayerSprite(c.CHAR_IMG, self.layer_scale(0))
       self.player.center_y = c.SCREEN_HEIGHT/2
       self.player.center_x = c.SCREEN_WIDTH/2
-      self.mob_list.append(self.player)
       self.layers.add_sprite(self.player, "player")
 
-      self.background = LayerSprite(c.BACKGR_IMG) #will always be printed first
-      self.background.center_y = c.SCREEN_HEIGHT/2
+      self.background = LayerSprite(c.BACKGR_IMG,c.SCALING) #will always be printed first
+      self.background.bottom = 0
       self.background.center_x = c.SCREEN_WIDTH/2
 
       for layer in range(0,6):
-         for i in range(int(c.SCREEN_WIDTH/(256*c.SCALING) + 10)):
-            self.add_block(i,layer)
+         for i in range(10):
+            self.add_grass(i,layer)
+         self.add_fire(layer)
       
       self.view_bottom = 0
       self.view_left = 0
@@ -41,47 +39,64 @@ class Startup(arcade.View):
       block_list_on_layer = self.layers.get_block_list(self.player.layer)
       self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
 
-   def add_block(self,i,layer):
+   def layer_scale(self, layer: int): #increasingly small with higher layer number
+      return float((-c.SCALING * layer)/(c.SCALING * c.SCALING) + c.SCALING)
+
+   def add_fire(self,layer):
+      self.fire = LayerSprite(c.FIRE_IMG, self.layer_scale(layer) * 2)
+      self.fire.left = 0
+      self.fire.bottom = (layer-1) * c.LAYER_WIDTH * self.layer_scale(layer)
+      self.fire.layer = layer
+      self.layers.add_block(self.fire)
+
+   def add_grass(self,i,layer):
       """Adds blocks to screen, currently it is grass."""
-      LAYER_SCALING = c.SCALING/((layer+1)/3 + 2/3)
-      self.grass = LayerSprite(c.GRASS_IMG, LAYER_SCALING)
-      self.grass.set_hit_box(((-128,-16),(128,-16),(128,-4),(-128,-4)))
-      self.grass.left = 256 * i * LAYER_SCALING
-      self.grass.bottom = layer * c.LAYER_WIDTH
+      self.grass = LayerSprite(c.GRASS_IMG, self.layer_scale(layer))
+      #hitbox_points = self.grass.get_hit_box()
+      self.grass.set_hit_box(((-128,-32),(128,-32),(128,0),(128,0),(-128,0),(-128,0)))
+      self.grass.center_x = 256 * i * self.layer_scale(layer)
+      self.grass.bottom = (layer-1) * c.LAYER_WIDTH * self.layer_scale(layer)
       self.grass.layer = layer
-      self.block_list.append(self.grass)
       self.layers.add_block(self.grass)
 
    def on_draw(self):
-      """Render c.SCREEN."""
+      """Render SCREEN."""
       arcade.start_render()
       self.background.draw()
-      for layer in range(self.layers.length()):
-         self.layers.get_block_list(layer).draw()
-         self.layers.get_mob_list(layer).draw()
+      self.layers.get_all().draw() #STILL NOT DOING ITS JOB. We need sprites to be able to be reassigned to different layers
+      
 
    def on_key_press(self, key, modifiers):
       """Called whenever a key is pressed."""
       if key == arcade.key.UP or key == arcade.key.W:
-         self.player.push_layer()
-         self.player.bottom = c.LAYER_WIDTH * self.player.layer
-         self.player._set_scale(c.SCALING/((self.player.layer+1)/3 + 2/3))
-         block_list_on_layer = self.layers.get_block_list(self.player.layer)
-         self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
+         if self.player.layer < 5:
+            self.layers.move_layer(self.player,self.player.layer + 1)
+            self.player.push_layer() #move the sprite up one layer
+            if self.player.bottom < c.LAYER_WIDTH * self.player.layer:
+               self.player.bottom = c.LAYER_WIDTH * self.player.layer #set the y of the player to the proper layer's minimum height
+            self.player._set_scale(self.layer_scale(self.player.layer)) #change the player's scale to seem farther away
+            block_list_on_layer = self.layers.get_block_list(self.player.layer)
+               #get the list of blocks on the layer of the player, and prepare them for collision \/
+            self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
       elif key == arcade.key.DOWN or key == arcade.key.S:
          if self.player.layer > 0:
+            self.layers.move_layer(self.player,self.player.layer - 1)
             self.player.pull_layer()
-            self.player._set_scale(c.SCALING/((self.player.layer+1)/3 + 2/3))
-            self.player.bottom = -c.LAYER_WIDTH * self.player.layer
+            self.player._set_scale(self.layer_scale(self.player.layer))
+            #self.player.bottom = c.LAYER_WIDTH * self.player.layer
             block_list_on_layer = self.layers.get_block_list(self.player.layer)
             self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
-      if key == arcade.key.LEFT or key == arcade.key.A:
+      elif key == arcade.key.LEFT or key == arcade.key.A:
          self.player.change_x = -c.PLAYER_MOVEMENT_SPEED
+         #SPEED GLITCH ON LAYER ZERO
       elif key == arcade.key.RIGHT or key == arcade.key.D:
          self.player.change_x = c.PLAYER_MOVEMENT_SPEED
-      '''if arcade.key.SPACE:
-         if self.physics_engine.can_jump():
-                self.player.change_y = c.PLAYER_JUMP_SPEED'''
+         #SPEED GLITCH ON LAYER ZERO
+      elif arcade.key.SPACE:
+         #if self.physics_engine.can_jump(): #THIS DOES NOT CHECK WHAT LAYERS ARE BEING USED FOR COLLISION
+         if self.player.bottom < c.LAYER_WIDTH * self.player.layer + 100:
+            self.player.change_y = c.PLAYER_MOVEMENT_SPEED
+      print(self.player.layer)
 
    def on_key_release(self, key, modifiers):
       """Called when the user releases a key."""
@@ -91,21 +106,24 @@ class Startup(arcade.View):
          self.player.change_x = 0
 
    def on_update(self, delta_time: float):
-      if self.player.bottom < self.player.layer * c.LAYER_WIDTH:
-         self.player.bottom = self.player.layer * c.LAYER_WIDTH
+
+      self.player.center_x = int(self.player.center_x + self.player.change_x * delta_time)
+      self.player.center_y = int(self.player.center_y + self.player.change_y * delta_time)
+
       self.physics_engine.update()
+      if self.player.bottom < self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer):
+         self.player.bottom = self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer)
 
       if self.player.top > self.window.height:
          self.player.top = self.window.height
-      if self.player.right > 2000:
-         self.player.right = 2000
+      #if self.player.right > 2000:
+      #   self.player.right = 2000
       if self.player.bottom < 0:
          self.player.bottom = 0
       if self.player.left < 0:
          self.player.left = 0
 
       changed = False
-
 
       left_boundary = self.view_left + c.LEFT_VIEWPORT_MARGIN
       if self.player.left < left_boundary:
