@@ -2,8 +2,8 @@ import os
 # Constants for window
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
-SCREEN_TITLE = "Vengeance"
-LAYER_WIDTH = 30
+SCREEN_TITLE = "Wall of Fire"
+LAYER_WIDTH = 32
 
 # player constants
 GRAVITY = 1
@@ -24,3 +24,4 @@ BACKGR_IMG = os.path.join(PATH, 'assets/background.png')
 GRASS_IMG = os.path.join(PATH, 'assets/field.png')
 GRASS_HB_IMG = os.path.join(PATH, 'assets/field-hb.png')
 NULL_IMG = os.path.join(PATH, 'assets/null.png')
+FIRE_IMG = os.path.join(PATH, 'assets/fire.png')
