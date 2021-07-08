@@ -16,6 +16,8 @@ class Startup(arcade.View):
       arcade.set_background_color(arcade.csscolor.BLACK)
       arcade.set_background_color((100,100,100,50))
 
+      self.physics_engine = None
+
    def setup(self):
       """set up game here, if called it will restart the game."""
       
@@ -58,7 +60,6 @@ class Startup(arcade.View):
       self.grass.bottom = (layer-1) * c.LAYER_WIDTH * self.layer_scale(layer)
       self.grass.layer = layer
       self.layers.add_block(self.grass)
-
    def on_draw(self):
       """Render SCREEN."""
       arcade.start_render()
@@ -113,7 +114,6 @@ class Startup(arcade.View):
       self.physics_engine.update()
       if self.player.bottom < self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer):
          self.player.bottom = self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer)
-
       if self.player.top > self.window.height:
          self.player.top = self.window.height
       #if self.player.right > 2000:
@@ -159,4 +159,8 @@ class Startup(arcade.View):
          arcade.set_viewport(self.view_left,
                               c.SCREEN_WIDTH + self.view_left,
                               self.view_bottom,
-                              c.SCREEN_HEIGHT + self.view_bottom)
+                              c.SCREEN_HEIGHT + self.view_bottom)      
+      
+      
+      self.physics_engine.update()
+
