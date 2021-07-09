@@ -3,8 +3,10 @@ from arcade import SpriteList
 import arcade
 class LayerWork():
     def __init__(self):
-
-        self.layer_list = [SpriteList(), SpriteList(), SpriteList(), SpriteList(), SpriteList(), SpriteList()] #moblist, then blocklist
+                            #coin_list    block_list    mob_list
+        self.layer_list = [[SpriteList(), SpriteList(), SpriteList()], [SpriteList(), SpriteList(), SpriteList()],
+                           [SpriteList(), SpriteList(), SpriteList()], [SpriteList(), SpriteList(), SpriteList()],
+                           [SpriteList(), SpriteList(), SpriteList()], [SpriteList(), SpriteList(), SpriteList()]]
 
     def add_layer(self,count = 1):
         for i in range(count):
@@ -13,22 +15,14 @@ class LayerWork():
     def add_sprite(self, sprite: LayerSprite, stype = "block"):
         if sprite.layer < self.length():
             if stype == "block":
-                self.layer_list[sprite.layer].insert(0, sprite) #order of sprites in spritelist does not matter
-            else: #player and other objects \/
-                self.layer_list[sprite.layer].append(sprite)
+                self.layer_list[sprite.layer][1].append(sprite) #order of sprites in spritelist does not matter
+            elif stype == "mob": #player and enemies \/
+                self.layer_list[sprite.layer][2].append(sprite)
+            elif stype == "coin":
+                self.layer_list[sprite.layer][0].append(sprite)
         else: 
             self.add_layer()
             self.add_sprite(sprite,stype)
-
-    #DOES NOT WORK
-    def move_layer(self,sprite,goal_layer): #this assumes that the sprite is the LAST sprite in its layer list
-        current_layer = self.layer_list[sprite.layer]
-        for item in current_layer:
-            if item._get_texture() == sprite._get_texture():
-                print(item)
-                '''self.layer_list[goal_layer].pop(-1) #remove from current layer, and then place on goal_layer
-                sprite.set_layer(goal_layer)
-                self.layer_list[goal_layer].insert(-1,sprite)'''
 
     def add_block(self,sprite: LayerSprite):
         self.add_sprite(sprite,"block")
@@ -36,17 +30,36 @@ class LayerWork():
     def add_mob(self,sprite: LayerSprite):
         self.add_sprite(sprite,"mob")
 
-    def get_list(self):
-        return self.layer_list
+    def add_coin(self,sprite):
+        self.add_sprite(sprite,"coin")
 
-    def get_block_list(self,layer: int):
-        return self.layer_list[layer]
+    #def remove_item(self,sprite)
+
+    def get_full_list(self):
+        return self.layer_list
+    
+    def get_list(self,layer: int,stype = 'coin'): #returns a spritelist
+        if stype == 'block':
+            return self.layer_list[layer][1]
+        elif stype == 'mob':
+            return self.layer_list[layer][2]
+        elif stype == 'coin':
+            return self.layer_list[layer][0]
+
+    def set_list(self,layer,slist = SpriteList, stype = 'coinlist'):
+        if stype == 'blocklist':
+            self.layer_list[layer][1] = slist
+        elif stype == 'moblist':
+            self.layer_list[layer][2] = slist
+        elif stype == 'coinlist':
+            self.layer_list[layer][0] = slist
 
     def get_all(self):
         master_list = SpriteList()
-        for layer in self.layer_list:
-            for sprite in layer:
-                master_list.insert(0,sprite)
+        for a_layer in self.layer_list:
+            for a_sprite_list in a_layer:
+                for a_sprite in a_sprite_list:
+                    master_list.insert(0,a_sprite)
         return master_list
 
     def get_mob_list(self,layer: int):
