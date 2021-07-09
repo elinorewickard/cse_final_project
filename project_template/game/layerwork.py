@@ -3,10 +3,10 @@ from arcade import SpriteList
 import arcade
 class LayerWork():
     def __init__(self):
-                            #coin_list    block_list    mob_list
-        self.layer_list = [[SpriteList(), SpriteList(), SpriteList()], [SpriteList(), SpriteList(), SpriteList()],
-                           [SpriteList(), SpriteList(), SpriteList()], [SpriteList(), SpriteList(), SpriteList()],
-                           [SpriteList(), SpriteList(), SpriteList()], [SpriteList(), SpriteList(), SpriteList()]]
+                            #coin_list    block_list    mob_list      player_list
+        self.layer_list = [[SpriteList(), SpriteList(), SpriteList(), SpriteList()], [SpriteList(), SpriteList(), SpriteList(), SpriteList()],
+                           [SpriteList(), SpriteList(), SpriteList(), SpriteList()], [SpriteList(), SpriteList(), SpriteList(), SpriteList()],
+                           [SpriteList(), SpriteList(), SpriteList(), SpriteList()], [SpriteList(), SpriteList(), SpriteList(), SpriteList()]]
 
     def add_layer(self,count = 1):
         for i in range(count):
@@ -20,6 +20,8 @@ class LayerWork():
                 self.layer_list[sprite.layer][2].append(sprite)
             elif stype == "coin":
                 self.layer_list[sprite.layer][0].append(sprite)
+            elif stype == "player":
+                self.layer_list[sprite.layer][3].append(sprite)
         else: 
             self.add_layer()
             self.add_sprite(sprite,stype)
@@ -33,6 +35,9 @@ class LayerWork():
     def add_coin(self,sprite):
         self.add_sprite(sprite,"coin")
 
+    def add_player(self,sprite):
+        self.add_sprite(sprite,"player")
+
     #def remove_item(self,sprite)
 
     def get_full_list(self):
@@ -45,6 +50,8 @@ class LayerWork():
             return self.layer_list[layer][2]
         elif stype == 'coin':
             return self.layer_list[layer][0]
+        elif stype == 'player':
+            return self.layer_list[layer][3]
 
     def set_list(self,layer,slist = SpriteList, stype = 'coinlist'):
         if stype == 'blocklist':
@@ -53,6 +60,8 @@ class LayerWork():
             self.layer_list[layer][2] = slist
         elif stype == 'coinlist':
             self.layer_list[layer][0] = slist
+        elif stype == 'playerlist':
+            self.layer_list[layer][3] = slist
 
     def get_all(self):
         master_list = SpriteList()
@@ -61,9 +70,6 @@ class LayerWork():
                 for a_sprite in a_sprite_list:
                     master_list.insert(0,a_sprite)
         return master_list
-
-    def get_mob_list(self,layer: int):
-        return self.layer_list[layer]
 
     def length(self):
         return len(self.layer_list)

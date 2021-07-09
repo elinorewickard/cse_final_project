@@ -6,7 +6,7 @@ from instructionView import InstructionView
 
 def main():
    """ Main method, runs the game when called. """
-   window = window = arcade.Window(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
+   window = arcade.Window(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
    start_view = InstructionView()
    game_view = Startup()
    window.show_view(start_view)
