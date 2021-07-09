@@ -1,5 +1,5 @@
 # [PROGRAM NAME] 
-A game where the play avoids objects to stay alive through various backround layers.
+A game where the player avoids objects to stay alive through various backround layers.
 
 ## Getting Started
 ---
@@ -19,6 +19,8 @@ root                    (project root folder)
 +-- LICENSE             (license file)
 +-- README.md           (general info)
 ```
+
+https://github.com/elinorewickard/cse_final_project.git
 
 ## Required Technologies
 ---
