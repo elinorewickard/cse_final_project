@@ -11,20 +11,19 @@ class Startup(arcade.View):
       self.layers = LayerWork()
 
       #separate variable for player sprite
-      self.player = arcade.Sprite()
+      self.player = LayerSprite()
       arcade.set_background_color(arcade.csscolor.BLACK)
       arcade.set_background_color((100,100,100,50))
       self.score = 0
       self.current_coin_layer = 0
       self.physics_engine = None
-
    def setup(self):
       """set up game here, if called it will restart the game."""
       
       self.player = LayerSprite(c.CHAR_IMG, self.layer_scale(0))
       self.player.center_y = c.SCREEN_HEIGHT/2
       self.player.center_x = c.SCREEN_WIDTH/2
-      self.layers.add_mob(self.player)
+      self.layers.add_player(self.player)
 
       self.background = LayerSprite(c.BACKGR_IMG,c.SCALING) #will always be printed first
       self.background.bottom = 0
@@ -46,9 +45,9 @@ class Startup(arcade.View):
       return float((-c.SCALING * layer)/(c.SCALING * c.SCALING) + c.SCALING)
 
    def add_fire(self,layer):
-      self.fire = LayerSprite(c.FIRE_IMG, self.layer_scale(layer) * 2)
+      self.fire = LayerSprite(c.FIRE_IMG, self.layer_scale(layer) * 4)
       self.fire.left = 0
-      self.fire.bottom = (layer-1) * c.LAYER_WIDTH * self.layer_scale(layer)
+      self.fire.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer)
       self.fire.layer = layer
       self.layers.add_mob(self.fire)
 
@@ -75,6 +74,10 @@ class Startup(arcade.View):
       self.background.draw()
       master_list = self.layers.get_all()
       master_list.draw()
+
+      score = (f'Score: {self.score}')
+      arcade.draw_text((score), 10 + self.view_left, 10 + self.view_bottom,
+                         arcade.csscolor.WHITE, 18)
 
 
    def on_key_press(self, key, modifiers):
@@ -105,7 +108,6 @@ class Startup(arcade.View):
          #if self.physics_engine.can_jump(): #THIS DOES NOT CHECK WHAT LAYERS ARE BEING USED FOR COLLISION
          if self.player.bottom < c.LAYER_WIDTH * self.player.layer + 100:
             self.player.change_y = c.PLAYER_MOVEMENT_SPEED
-      print(self.player.layer)
 
    def on_key_release(self, key, modifiers):
       """Called when the user releases a key."""
@@ -115,19 +117,21 @@ class Startup(arcade.View):
          self.player.change_x = 0
 
    def on_update(self, delta_time: float):
-
       #self.player.center_x = int(self.player.center_x + self.player.change_x * delta_time) #LAGS THE GAME GREATLY
       #self.player.center_y = int(self.player.center_y + self.player.change_y * delta_time)
 
-      '''self.current_coin_layer = self.layers.get_list(self.player.layer,'coin') #gets SpriteLIST
+      self.current_coin_layer = self.layers.get_list(self.player.layer,'coin') #gets SpriteLIST
       for coin in self.current_coin_layer:
          if self.player.collides_with_sprite(coin):
             self.current_coin_layer.remove(coin)
             self.layers.set_list(self.player.layer,self.current_coin_layer, 'coinlist')
             self.score += 1
-            print(self.score)'''
 
-      self.physics_engine.update()
+      self.current_fire_layer = self.layers.get_list(self.player.layer,'mob')
+      if self.player.collides_with_list(self.current_fire_layer):
+         self.__init__()
+
+      #self.physics_engine.update()
 
       if self.player.bottom < self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer):
          self.player.bottom = self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer)
