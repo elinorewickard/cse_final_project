@@ -45,14 +45,16 @@ class Startup(arcade.View):
       return float((-c.SCALING * layer)/(c.SCALING * c.SCALING) + c.SCALING)
 
    def add_fire(self,layer):
-      self.fire = LayerSprite(c.FIRE_IMG, self.layer_scale(layer) * 4)
+      self.fire = LayerSprite(c.FIRE_IMG, self.layer_scale(layer) * 3)
       self.fire.left = 0
       self.fire.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer)
       self.fire.layer = layer
       self.layers.add_mob(self.fire)
 
+      self.fire.velocity = (2500, 0)      
+
    def add_coin(self,i,layer):
-      self.coin = LayerSprite(c.COIN_IMG, self.layer_scale(layer))
+      self.coin = LayerSprite(c.COIN_IMG, self.layer_scale(layer) * .03)
       self.coin.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer)+50
       self.coin.right = 256 * i * self.layer_scale(layer)
       self.coin.layer = layer
