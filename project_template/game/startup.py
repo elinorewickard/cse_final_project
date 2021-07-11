@@ -17,6 +17,7 @@ class Startup(arcade.View):
       self.score = 0
       self.current_coin_layer = 0
       self.physics_engine = None
+
    def setup(self):
       """set up game here, if called it will restart the game."""
       
@@ -41,25 +42,31 @@ class Startup(arcade.View):
       block_list_on_layer = self.layers.get_list(self.player.layer, 'block')
       self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
 
-   def layer_scale(self, layer: int): #increasingly small with higher layer number
+   def layer_scale(self, layer: int): 
+      #increasingly small with higher layer number
       return float((-c.SCALING * layer)/(c.SCALING * c.SCALING) + c.SCALING)
 
    def add_fire(self,layer):
-      self.fire = LayerSprite(c.FIRE_IMG, self.layer_scale(layer) * 4)
+      """adds fire sprite to the layers, when player hits the fire game ends"""
+      self.fire = LayerSprite(c.FIRE_IMG, self.layer_scale(layer) * 3)
       self.fire.left = 0
       self.fire.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer)
       self.fire.layer = layer
       self.layers.add_mob(self.fire)
 
+      self.fire.velocity = (2500, 0)      
+
    def add_coin(self,i,layer):
-      self.coin = LayerSprite(c.COIN_IMG, self.layer_scale(layer))
+      """adds coins to the layers, when hit the player collects them and score increases"""
+      self.coin = LayerSprite(c.COIN_IMG, self.layer_scale(layer) * .03)
       self.coin.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer)+50
       self.coin.right = 256 * i * self.layer_scale(layer)
       self.coin.layer = layer
       self.layers.add_coin(self.coin)
 
    def add_grass(self,i,layer):
-      """Adds blocks to screen, currently it is grass."""
+      """Adds blocks to screen, currently it is grass. 
+      These show the seperate layers on the window"""
       self.grass = LayerSprite(c.GRASS_IMG, self.layer_scale(layer))
       #hitbox_points = self.grass.get_hit_box()
       self.grass.set_hit_box(((-128,-32),(128,-32),(128,0),(128,0),(-128,0),(-128,0)))
@@ -81,7 +88,8 @@ class Startup(arcade.View):
 
 
    def on_key_press(self, key, modifiers):
-      """Called whenever a key is pressed."""
+      """Called whenever a key is pressed. Can use arrows or AWSD to move. 
+      Up and W move player through the layers, space jumps."""
       if key == arcade.key.UP or key == arcade.key.W:
          if self.player.layer < 5:
             self.player.push_layer() #move the sprite up one layer
@@ -117,9 +125,11 @@ class Startup(arcade.View):
          self.player.change_x = 0
 
    def on_update(self, delta_time: float):
+      """Updates that need to happen, collecting coins, checking if hit fire, player position, etc."""
       #self.player.center_x = int(self.player.center_x + self.player.change_x * delta_time) #LAGS THE GAME GREATLY
       #self.player.center_y = int(self.player.center_y + self.player.change_y * delta_time)
 
+      #coin collection
       self.current_coin_layer = self.layers.get_list(self.player.layer,'coin') #gets SpriteLIST
       for coin in self.current_coin_layer:
          if self.player.collides_with_sprite(coin):
@@ -127,12 +137,14 @@ class Startup(arcade.View):
             self.layers.set_list(self.player.layer,self.current_coin_layer, 'coinlist')
             self.score += 1
 
+      #fire hit, still a lil buggy
       self.current_fire_layer = self.layers.get_list(self.player.layer,'mob')
       if self.player.collides_with_list(self.current_fire_layer):
          self.__init__()
 
       #self.physics_engine.update()
 
+      #player position
       if self.player.bottom < self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer):
          self.player.bottom = self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer)
       if self.player.top > self.window.height:
