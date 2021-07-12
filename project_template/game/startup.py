@@ -133,32 +133,15 @@ class Startup(arcade.View):
          self.player.change_x = 0
 
    def on_update(self, delta_time: float):
-<<<<<<< HEAD
-      """Updates that need to happen, collecting coins, checking if hit fire, player position, etc."""
-      #self.player.center_x = int(self.player.center_x + self.player.change_x * delta_time) #LAGS THE GAME GREATLY
-      #self.player.center_y = int(self.player.center_y + self.player.change_y * delta_time)
-
-      #coin collection
-      self.current_coin_layer = self.layers.get_list(self.player.layer,'coin') #gets SpriteLIST
-      for coin in self.current_coin_layer:
-=======
 
       current_coin_layer = self.layers.get_list(self.player.layer,'coin') #gets SpriteLIST
       for coin in current_coin_layer:
->>>>>>> DWells
+
          if self.player.collides_with_sprite(coin):
             current_coin_layer.remove(coin)
             self.layers.set_list(self.player.layer,current_coin_layer, 'coinlist')
             self.score += 1
-<<<<<<< HEAD
 
-      #fire hit, still a lil buggy
-      self.current_fire_layer = self.layers.get_list(self.player.layer,'mob')
-      if self.player.collides_with_list(self.current_fire_layer):
-         self.__init__()
-
-      #self.physics_engine.update()
-=======
             arcade.play_sound(self.collect_coin_sound)
             print(self.score)
 
@@ -171,7 +154,6 @@ class Startup(arcade.View):
       if self.player.collides_with_list(self.current_enemy_layer):
          #self.__init__()
          print('end game')
->>>>>>> DWells
 
       #player position
       if self.player.bottom < self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer):
