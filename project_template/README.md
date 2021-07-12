@@ -1,9 +1,11 @@
 # [PROGRAM NAME] 
-A game where the player avoids objects to stay alive through various backround layers.
+A game where the player avoids the impending death of fire following behind him as well as all objects except for berry bushes
+which are trying to also end his life. Your score is dependant on how many berries you can eat and your total distance.
 
 ## Getting Started
 ---
-[how to install and run the program]
+To run the game, simply run the program called __main__.py
+Controls are A, D, and space to go left, right, and jump, and W and S are for moving up and down the layers.
 
 ## Project Structure
 ---
