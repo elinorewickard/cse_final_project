@@ -26,10 +26,6 @@ GRASS_IMG = os.path.join(PATH, 'assets/field.png')
 TREE_IMG = os.path.join(PATH, 'assets/tree.png')
 NULL_IMG = os.path.join(PATH, 'assets/null.png')
 FIRE_IMG = os.path.join(PATH, 'assets/fire.png')
-<<<<<<< HEAD
-COIN_IMG = os.path.join(PATH, 'assets/pixel-coin.png')
-=======
 COIN_IMG = os.path.join(PATH, 'assets/coin.png')
-
 JUMP = os.path.join(PATH, 'assets/jump.wav')
->>>>>>> DWells
+
