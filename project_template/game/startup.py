@@ -4,6 +4,7 @@ import constants as c
 from layersprite import LayerSprite
 from layerwork import LayerWork
 
+
 class Startup(arcade.View):
    """Setting up game. """
    def __init__(self):
@@ -17,6 +18,9 @@ class Startup(arcade.View):
       arcade.set_background_color((200,100,50,100))
       self.score = 0
       self.physics_engine = None
+
+
+
    def setup(self):
       """set up game here, if called it will restart the game."""
       
@@ -143,8 +147,7 @@ class Startup(arcade.View):
 
       self.current_enemy_layer = self.layers.get_list(self.player.layer,'mob')
       if self.player.collides_with_list(self.current_enemy_layer):
-         #self.__init__()
-         print('end game')
+         quit()
 
       if self.player.bottom < self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer):
          self.player.bottom = self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer)
