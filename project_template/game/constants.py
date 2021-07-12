@@ -10,6 +10,7 @@ GRAVITY = 1
 PLAYER_MOVEMENT_SPEED = 20
 PLAYER_JUMP_SPEED = 20
 SCALING = 3.0
+FIRE_MOVEMENT_SPEED = 10
 
 # margin minimum between character and screen edge
 LEFT_VIEWPORT_MARGIN = 250
@@ -22,7 +23,9 @@ PATH = os.path.dirname(os.path.abspath(__file__))
 CHAR_IMG = os.path.join(PATH, 'assets/boxman.png')
 BACKGR_IMG = os.path.join(PATH, 'assets/background.png')
 GRASS_IMG = os.path.join(PATH, 'assets/field.png')
-GRASS_HB_IMG = os.path.join(PATH, 'assets/field-hb.png')
+TREE_IMG = os.path.join(PATH, 'assets/tree.png')
 NULL_IMG = os.path.join(PATH, 'assets/null.png')
 FIRE_IMG = os.path.join(PATH, 'assets/fire.png')
 COIN_IMG = os.path.join(PATH, 'assets/coin.png')
+
+JUMP = os.path.join(PATH, 'assets/jump.wav')
