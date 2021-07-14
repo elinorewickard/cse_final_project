@@ -32,7 +32,7 @@ class Startup(arcade.View):
       self.background.center_x = c.SCREEN_WIDTH/2'''
 
       for layer in range(0,6):
-         for i in range(10):
+         for i in range(100):
             self.add_grass(i,layer)
             self.add_coin(i,layer)
          self.add_fire(layer)
@@ -53,7 +53,7 @@ class Startup(arcade.View):
 
    def add_fire(self,layer):
       self.fire = LayerSprite(c.FIRE_IMG, self.layer_scale(layer) * 4)
-      self.fire.left = 0
+      self.fire.left = -500
       self.fire.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer)
       self.fire.velocity = (c.FIRE_MOVEMENT_SPEED,0)
       self.fire.layer = layer
@@ -70,7 +70,6 @@ class Startup(arcade.View):
    def add_grass(self,i,layer):
       """Adds blocks to screen, currently it is grass."""
       self.grass = LayerSprite(c.GRASS_IMG, self.layer_scale(layer))
-      #hitbox_points = self.grass.get_hit_box()
       self.grass.set_hit_box(((-128,-32),(128,-32),(128,0),(128,0),(-128,0),(-128,0)))
       self.grass.center_x = 256 * i * self.layer_scale(layer)
       self.grass.bottom = (layer-1) * c.LAYER_WIDTH * self.layer_scale(layer)
@@ -80,7 +79,7 @@ class Startup(arcade.View):
    def on_draw(self):
       """Render SCREEN."""
       arcade.start_render()
-      master_list = self.layers.get_all()
+      master_list = self.layers.get_all_in_range(self.player.center_x)
       master_list.draw()
 
       score = (f'Score: {self.score}')
@@ -93,27 +92,29 @@ class Startup(arcade.View):
       if key == arcade.key.UP or key == arcade.key.W:
          if self.player.layer < 5:
             self.player.push_layer() #move the sprite up one layer
+            self.layers.push_player(self.player.layer)
             if self.player.bottom < c.LAYER_WIDTH * self.player.layer:
                self.player.bottom = c.LAYER_WIDTH * self.player.layer #set the y of the player to the proper layer's minimum height
             self.player._set_scale(self.layer_scale(self.player.layer)) #change the player's scale to seem farther away
             block_list_on_layer = self.layers.get_list(self.player.layer, 'block')
                #get the list of blocks on the layer of the player, and prepare them for collision \/
             self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
+
       elif key == arcade.key.DOWN or key == arcade.key.S:
          if self.player.layer > 0:
             self.player.pull_layer()
+            self.layers.pull_player(self.player.layer)
             self.player._set_scale(self.layer_scale(self.player.layer))
-            #self.player.bottom = c.LAYER_WIDTH * self.player.layer
             block_list_on_layer = self.layers.get_list(self.player.layer, 'block')
             self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
+
       elif key == arcade.key.LEFT or key == arcade.key.A:
          self.player.change_x = -c.PLAYER_MOVEMENT_SPEED
-         #SPEED GLITCH ON LAYER ZERO
+
       elif key == arcade.key.RIGHT or key == arcade.key.D:
          self.player.change_x = c.PLAYER_MOVEMENT_SPEED
-         #SPEED GLITCH ON LAYER ZERO
+
       elif arcade.key.SPACE:
-         #if self.physics_engine.can_jump(): #THIS DOES NOT CHECK WHAT LAYERS ARE BEING USED FOR COLLISION
          if self.player.bottom < c.LAYER_WIDTH * self.player.layer + 100:
             self.player.change_y = c.PLAYER_MOVEMENT_SPEED
 
@@ -133,7 +134,6 @@ class Startup(arcade.View):
             self.layers.set_list(self.player.layer,current_coin_layer, 'coinlist')
             self.score += 1
             arcade.play_sound(self.collect_coin_sound)
-            print(self.score)
 
       for i in range(0,6):
          mob_list = self.layers.get_list(i,'mob')
@@ -149,8 +149,6 @@ class Startup(arcade.View):
          self.player.bottom = self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer)
       if self.player.top > self.window.height:
          self.player.top = self.window.height
-      #if self.player.right > 2000:
-      #   self.player.right = 2000
       if self.player.bottom < 0:
          self.player.bottom = 0
       if self.player.left < 0:
