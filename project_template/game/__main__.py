@@ -2,6 +2,7 @@ import constants as c
 import arcade
 from startup import Startup
 from startScreen import StartScreen
+
 # program entry point
 
 def main():
@@ -12,6 +13,5 @@ def main():
    window.show_view(start_view)
    game_view.setup()
    arcade.run()
-
 if __name__ == "__main__":
    main()

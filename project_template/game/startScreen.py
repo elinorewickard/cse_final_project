@@ -16,10 +16,10 @@ class StartScreen(arcade.View):
     def on_draw(self):
         """ Draw this view """
         arcade.start_render()
-        arcade.draw_text("You've started a fire in the forest and now\nmust collect enough coins to escape!", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2,
+        arcade.draw_text("You've started a fire in the forest and now\nmust collect enough berries to escape!", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2,
                          arcade.color.WHITE, font_size=40, anchor_x="center")
         arcade.draw_text("Click to start...", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2-75,
-                         arcade.color.WHITE, font_size=20, anchor_x="center")
+                         arcade.color.WHITE, font_size=25, anchor_x="center")
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         """ If the user presses the mouse button, start the game. """
