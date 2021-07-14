@@ -150,7 +150,7 @@ class Startup(arcade.View):
       if self.player.collides_with_list(self.current_enemy_layer):
          view = EndScreen()
          self.window.show_view(view)
-         self.setup()
+         
          
 
       if self.player.bottom < self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer):
