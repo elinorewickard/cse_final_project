@@ -1,7 +1,6 @@
 import arcade
 import constants as c
 
-
 class EndScreen(arcade.View):
     def __init__(self):
       """"class constructor. Sets up the window."""
@@ -20,7 +19,3 @@ class EndScreen(arcade.View):
                          arcade.color.WHITE, font_size=40, anchor_x="center")
        # arcade.draw_text("Click to exit...", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2-75,
        #                  arcade.color.WHITE, font_size=20, anchor_x="center")
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        """ If the user presses the mouse button, exit the program """
-        
