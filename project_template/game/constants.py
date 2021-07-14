@@ -1,4 +1,5 @@
 import os
+
 # Constants for window
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650

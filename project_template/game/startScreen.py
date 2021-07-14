@@ -22,7 +22,7 @@ class StartScreen(arcade.View):
                          arcade.color.WHITE, font_size=25, anchor_x="center")
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        """ If the user presses the mouse button, start the game. """
+        """ When the user presses the mouse button, start the game. """
         game_view = Startup()
         game_view.setup()
         self.window.show_view(game_view)
