@@ -3,6 +3,7 @@ import arcade
 import constants as c
 from layersprite import LayerSprite
 from layerwork import LayerWork
+from endScreen import EndScreen
 
 
 class Startup(arcade.View):
@@ -147,7 +148,10 @@ class Startup(arcade.View):
 
       self.current_enemy_layer = self.layers.get_list(self.player.layer,'mob')
       if self.player.collides_with_list(self.current_enemy_layer):
-         quit()
+         view = EndScreen()
+         self.window.show_view(view)
+         self.setup()
+         
 
       if self.player.bottom < self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer):
          self.player.bottom = self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer)
