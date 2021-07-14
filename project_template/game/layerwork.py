@@ -12,6 +12,18 @@ class LayerWork():
         for i in range(count):
             self.layer_list.insert(0,SpriteList()) #add a layer to the beginning
 
+    def push_player(self,layer):
+        if layer < 5:
+            player_list = self.layer_list[layer][3]
+            self.layer_list[layer][3] = SpriteList()
+            self.layer_list[layer + 1][3] = player_list
+
+    def pull_player(self,layer):
+        if layer > 0:
+            player_list = self.layer_list[layer][3]
+            self.layer_list[layer][3] = SpriteList()
+            self.layer_list[layer - 1][3] = player_list
+
     def add_sprite(self, sprite: LayerSprite, stype = "block"):
         if sprite.layer < self.length():
             if stype == "block":
@@ -69,6 +81,16 @@ class LayerWork():
             for a_sprite_list in a_layer:
                 for a_sprite in a_sprite_list:
                     master_list.insert(0,a_sprite)
+        return master_list
+    
+    def get_all_in_range(self,player_center: int):
+        master_list = SpriteList()
+        for a_layer in self.layer_list:
+            for a_sprite_list in a_layer:
+                for a_sprite in a_sprite_list:
+                    if a_sprite.left > player_center - 1500: #this is so it does not print EVERYTHING, just what is within the screen
+                        if a_sprite.right < player_center + 1500:
+                            master_list.insert(0,a_sprite)
         return master_list
 
     def length(self):
