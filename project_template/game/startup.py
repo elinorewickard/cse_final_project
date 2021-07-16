@@ -28,6 +28,7 @@ class Startup(arcade.View):
 
    def setup(self):
       """set up game here, if called it will restart the game."""
+      
 
       #important for scrolling viewpoint 
       self.view_bottom = 0
@@ -36,6 +37,7 @@ class Startup(arcade.View):
       #sound paths for objects collected and jumps
       self.collect_coin_sound = arcade.load_sound(c.CRUNCH) 
       self.jump_sound = arcade.load_sound(c.JUMP)
+      self.fire_sound = arcade.load_sound(c.FIRE)
 
       #centering the player on the screen
       self.player = LayerSprite(c.CHAR_IMG, self.layer_scale(0))
@@ -66,6 +68,7 @@ class Startup(arcade.View):
    def layer_scale(self, layer: int): #increasingly small with higher layer number
       """Returns a layer sprite"""
       return float((-c.SCALING * layer)/(c.SCALING * c.SCALING) + c.SCALING)
+      
 
    def add_fire(self,layer):
       """Adds fire sprite off of the screen with a rightward velocity."""
@@ -75,6 +78,8 @@ class Startup(arcade.View):
       self.fire.velocity = (c.FIRE_MOVEMENT_SPEED,0)
       self.fire.layer = layer
       self.layers.add_mob(self.fire)
+      
+      
       
 
    def add_coin(self,i,layer):
@@ -93,7 +98,9 @@ class Startup(arcade.View):
       self.grass.bottom = (layer-1) * c.LAYER_WIDTH * self.layer_scale(layer)
       self.grass.layer = layer
       self.layers.add_block(self.grass)
-
+      
+   
+   
    def on_draw(self):
       """Render SCREEN."""
       arcade.start_render()
@@ -168,6 +175,7 @@ class Startup(arcade.View):
       if self.player.collides_with_list(self.current_enemy_layer):
          view = EndScreen()
          self.window.show_view(view)
+         arcade.play_sound(self.fire_sound)
 
       #tracking where the player is on the screen
       if self.player.bottom < self.player.layer * c.LAYER_WIDTH * self.layer_scale(self.player.layer):

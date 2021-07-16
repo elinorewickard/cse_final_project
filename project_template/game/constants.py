@@ -30,4 +30,5 @@ FIRE_IMG = os.path.join(PATH, 'assets/fire.png')
 COIN_IMG = os.path.join(PATH, 'assets/coin.png')
 JUMP = os.path.join(PATH, 'assets/jump.wav')
 CRUNCH = os.path.join(PATH, 'assets/Crunch.wav')
+FIRE = os.path.join(PATH, 'assets/fire.wav')
 
