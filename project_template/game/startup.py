@@ -84,7 +84,7 @@ class Startup(arcade.View):
 
    def add_coin(self,i,layer):
       """Adding coin sprites to the window"""
-      self.coin = LayerSprite(c.COIN_IMG, self.layer_scale(layer))
+      self.coin = LayerSprite(c.COIN_IMG, self.layer_scale(layer)* .15)
       self.coin.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer)+50
       self.coin.right = 256 * i * self.layer_scale(layer)
       self.coin.layer = layer
