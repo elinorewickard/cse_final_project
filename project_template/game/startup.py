@@ -34,8 +34,8 @@ class Startup(arcade.View):
       self.view_left = 0
 
       #sound paths for objects collected and jumps
-      self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav") 
-      self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
+      self.collect_coin_sound = arcade.load_sound(c.CRUNCH) 
+      self.jump_sound = arcade.load_sound(c.JUMP)
 
       #centering the player on the screen
       self.player = LayerSprite(c.CHAR_IMG, self.layer_scale(0))
@@ -136,6 +136,7 @@ class Startup(arcade.View):
       elif arcade.key.SPACE:
          if self.player.bottom < c.LAYER_WIDTH * self.player.layer + 100:
             self.player.change_y = c.PLAYER_MOVEMENT_SPEED
+            arcade.play_sound(self.jump_sound)
 
    def on_key_release(self, key, modifiers):
       """Called when the user releases a key."""
