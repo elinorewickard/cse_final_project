@@ -54,13 +54,8 @@ class Startup(arcade.View):
          for i in range(100):
             self.add_grass(i,layer)
             self.add_coin(i,layer)
+            self.add_tree(i, layer)
          self.add_fire(layer)
-
-      tree = LayerSprite(c.TREE_IMG, self.layer_scale(3))
-      tree.bottom = (3) * c.LAYER_WIDTH * self.layer_scale(3) - 13
-      tree.left = 500
-      tree.layer = 3
-      self.layers.add_mob(tree)
 
       block_list_on_layer = self.layers.get_list(self.player.layer, 'block')
       self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
@@ -80,13 +75,20 @@ class Startup(arcade.View):
       self.layers.add_mob(self.fire)
       
       
-      
+   def add_tree(self, i, layer):
+      """Adds tree sprite to the screen as blocks"""
+      self.tree = LayerSprite(c.TREE_IMG, self.layer_scale(3))
+      self.tree.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer) + 10
+      self.tree.left = 350 * i * self.layer_scale(layer)
+      self.tree.layer = layer
+      self.layers.add_block(self.tree)
+
 
    def add_coin(self,i,layer):
       """Adding coin sprites to the window"""
       self.coin = LayerSprite(c.COIN_IMG, self.layer_scale(layer))
-      self.coin.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer)+50
-      self.coin.right = 256 * i * self.layer_scale(layer)
+      self.coin.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer) + 50
+      self.coin.right = 400 * i * self.layer_scale(layer)
       self.coin.layer = layer
       self.layers.add_coin(self.coin)
 
