@@ -1,7 +1,7 @@
 import arcade
 import constants as c
 
-class EndScreen(arcade.View):
+class WinScreen(arcade.View):
     def __init__(self):
       """"class constructor. Sets up the window."""
       super().__init__()
@@ -15,5 +15,6 @@ class EndScreen(arcade.View):
     def on_draw(self):
         """ Draw this view """
         arcade.start_render()
-        arcade.draw_text("The fire got you...\nYou have now joined the forest.", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2,
+        arcade.draw_text("You got out!", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2,
                          arcade.color.WHITE, font_size=40, anchor_x="center")
+

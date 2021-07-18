@@ -3,7 +3,7 @@ import os
 # Constants for window
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
-SCREEN_TITLE = "Wall of Fire"
+SCREEN_TITLE = "Wall of Flames"
 LAYER_WIDTH = 32
 
 # player constants
