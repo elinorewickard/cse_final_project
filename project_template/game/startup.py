@@ -1,10 +1,9 @@
-
 import arcade
 import constants as c
 from layersprite import LayerSprite
 from layerwork import LayerWork
 from endScreen import EndScreen
-
+from winScreen import WinScreen
 
 class Startup(arcade.View):
    """Setting up game. """
@@ -28,8 +27,6 @@ class Startup(arcade.View):
 
    def setup(self):
       """set up game here, if called it will restart the game."""
-      
-
       #important for scrolling viewpoint 
       self.view_bottom = 0
       self.view_left = 0
@@ -44,10 +41,6 @@ class Startup(arcade.View):
       self.player.center_y = c.SCREEN_HEIGHT/2
       self.player.center_x = c.SCREEN_WIDTH/2
       self.layers.add_player(self.player)
-
-      '''self.background = LayerSprite(c.BACKGR_IMG,c.SCALING) #will always be printed first
-      self.background.bottom = 0
-      self.background.center_x = c.SCREEN_WIDTH/2'''
 
       #setting up the different layers and adding the sprites to each
       for layer in range(0,6):
@@ -92,6 +85,7 @@ class Startup(arcade.View):
       self.coin.layer = layer
       self.layers.add_coin(self.coin)
 
+
    def add_grass(self,i,layer):
       """Adds blocks to screen, currently it is grass."""
       self.grass = LayerSprite(c.GRASS_IMG, self.layer_scale(layer))
@@ -101,7 +95,6 @@ class Startup(arcade.View):
       self.grass.layer = layer
       self.layers.add_block(self.grass)
       
-   
    
    def on_draw(self):
       """Render SCREEN."""
@@ -147,12 +140,14 @@ class Startup(arcade.View):
             self.player.change_y = c.PLAYER_MOVEMENT_SPEED
             arcade.play_sound(self.jump_sound)
 
+
    def on_key_release(self, key, modifiers):
       """Called when the user releases a key."""
       if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.DOWN or key == arcade.key.S:
          self.player.change_y = 0
       if key == arcade.key.LEFT or key == arcade.key.A or key == arcade.key.RIGHT or key == arcade.key.D:
          self.player.change_x = 0
+
 
    def on_update(self, delta_time: float):
       """Needed updates for game play. Change in player positions, fire collisions, etc."""
@@ -175,8 +170,8 @@ class Startup(arcade.View):
       #when fire collision happens, end screen is pulled up
       self.current_enemy_layer = self.layers.get_list(self.player.layer,'mob')
       if self.player.collides_with_list(self.current_enemy_layer):
-         view = EndScreen()
-         self.window.show_view(view)
+         lose_view = EndScreen()
+         self.window.show_view(lose_view)
          arcade.play_sound(self.fire_sound)
 
       #tracking where the player is on the screen
@@ -226,7 +221,12 @@ class Startup(arcade.View):
          arcade.set_viewport(self.view_left,
                               c.SCREEN_WIDTH + self.view_left,
                               self.view_bottom,
-                              c.SCREEN_HEIGHT + self.view_bottom)      
-      
+                              c.SCREEN_HEIGHT + self.view_bottom)
+
+      #setting win screen if player gets enough berries and distance
+      if self.score == 25 and self.player.center_x >= 500:
+         win_view = WinScreen()
+         self.window.show_view(win_view)
+   
       
       self.physics_engine.update()
