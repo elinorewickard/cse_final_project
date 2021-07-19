@@ -113,7 +113,6 @@ class Startup(arcade.View):
       if key == arcade.key.UP or key == arcade.key.W:
          if self.player.layer < 5:
             self.player.push_layer() #move the sprite up one layer
-            self.layers.push_player(self.player.layer)
             if self.player.bottom < c.LAYER_WIDTH * self.player.layer:
                self.player.bottom = c.LAYER_WIDTH * self.player.layer #set the y of the player to the proper layer's minimum height
             self.player._set_scale(self.layer_scale(self.player.layer)) #change the player's scale to seem farther away
@@ -124,16 +123,15 @@ class Startup(arcade.View):
       elif key == arcade.key.DOWN or key == arcade.key.S:
          if self.player.layer > 0:
             self.player.pull_layer()
-            self.layers.pull_player(self.player.layer)
             self.player._set_scale(self.layer_scale(self.player.layer))
             block_list_on_layer = self.layers.get_list(self.player.layer, 'block')
             self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
 
       elif key == arcade.key.LEFT or key == arcade.key.A:
-         self.player.change_x = -c.PLAYER_MOVEMENT_SPEED
+         self.player.change_x = -(c.PLAYER_MOVEMENT_SPEED-((self.player.center_x-200)/50)+(self.score*7))
 
       elif key == arcade.key.RIGHT or key == arcade.key.D:
-         self.player.change_x = c.PLAYER_MOVEMENT_SPEED
+         self.player.change_x = (c.PLAYER_MOVEMENT_SPEED-((self.player.center_x-200)/50)+(self.score*7))
 
       elif arcade.key.SPACE:
          if self.player.bottom < c.LAYER_WIDTH * self.player.layer + 100:
