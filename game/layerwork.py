@@ -1,7 +1,8 @@
 from layersprite import LayerSprite
 from arcade import SpriteList
 import arcade
-from constants import CHAR_IMG
+from constants import CHAR_IMG, SCREEN_WIDTH
+
 class LayerWork():
     def __init__(self):
                             #coin_list    block_list    mob_list     
@@ -69,8 +70,9 @@ class LayerWork():
                     master_list.insert(0,a_sprite)
         return master_list
     
-    def get_all_in_range(self,player_center: int):
+    def get_all_in_range(self,player_center: int, burn_sound):
         master_list = SpriteList()
+        fire = self.layer_list[0][2][0].center_x
         for l in range(len(self.layer_list)):
             layer = self.layer_list[l]
             for i in range(len(layer)):
@@ -78,10 +80,15 @@ class LayerWork():
                 j = 0
                 while j < len(layer_type):
                     a_sprite = layer_type[j]
-                    if a_sprite.left > player_center - 2500: #this is so it does not print EVERYTHING, just what is within the screen
-                        if a_sprite.right < player_center + 1500:
-                            master_list.insert(0,a_sprite)
-                        j+=1
+                    if a_sprite.left > player_center - 5000: #this is so it does not print EVERYTHING, just what is within the screen
+                        if i <2 and a_sprite.right < fire:
+                            layer_type.pop(j)
+                            if a_sprite.right > player_center - SCREEN_WIDTH:
+                                arcade.play_sound(burn_sound)
+                        else:
+                            if a_sprite.right < player_center + 1500:
+                                master_list.insert(0,a_sprite)
+                            j+=1
                     else:
                         layer_type.pop(j) #past an uncertain point, items will be removed
             # Put player in as the last thing of the layer behind his layer

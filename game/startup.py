@@ -33,9 +33,10 @@ class Startup(arcade.View):
       self.view_left = 0
 
       #sound paths for objects collected and jumps
-      self.collect_coin_sound = arcade.load_sound(c.CRUNCH) 
+      self.eat_sound = arcade.load_sound(c.CRUNCH) 
       self.jump_sound = arcade.load_sound(c.JUMP)
       self.fire_sound = arcade.load_sound(c.FIRE)
+      self.burn_sound = arcade.load_sound(c.BURN)
 
       #centering the player on the screen
       self.player = LayerSprite(c.CHAR_IMG, self.layer_scale(0))
@@ -62,10 +63,11 @@ class Startup(arcade.View):
    def add_fire(self,layer):
       """Adds fire sprite off of the screen with a rightward velocity."""
       self.fire = LayerSprite(c.FIRE_IMG, self.layer_scale(layer) * 4)
-      self.fire.left = -1000
+      self.fire.left = -2000
       self.fire.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer)
       self.fire.velocity = (c.FIRE_MOVEMENT_SPEED,0)
       self.fire.layer = layer
+      self.fire.set_hit_box(((0,-100),(10,-100),(10,100),(0,100)))
       self.layers.add_mob(self.fire)
       
       
@@ -102,7 +104,7 @@ class Startup(arcade.View):
       """Render SCREEN."""
       arcade.start_render()
       arcade.draw_texture_rectangle(c.SCREEN_WIDTH//2 + self.view_left, c.SCREEN_HEIGHT//2 + self.view_bottom, c.SCREEN_WIDTH, c.SCREEN_HEIGHT, self.background_image)
-      master_list = self.layers.get_all_in_range(self.player.center_x)
+      master_list = self.layers.get_all_in_range(self.player.center_x, self.burn_sound)
       master_list.draw()
 
       #tracks score for items collected
@@ -169,14 +171,14 @@ class Startup(arcade.View):
             current_coin_layer.remove(coin)
             self.layers.set_list(self.player.layer,current_coin_layer, 'coinlist')
             self.score += 1
-            arcade.play_sound(self.collect_coin_sound)
+            arcade.play_sound(self.eat_sound)
 
       #tracking mmob list - fire wall
       for i in range(0,6):
          mob_list = self.layers.get_list(i,'mob')
          for sprite in mob_list:
             sprite.center_x = max(int(sprite.center_x + sprite.change_x),
-                                 self.player.left - 1000)
+                                 self.player.left - 1500)
             # Must never be more than 1500 units away from the player
 
 
