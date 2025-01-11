@@ -34,6 +34,7 @@ https://github.com/elinorewickard/cse_final_project.git
 ## Required Technologies
 ---
 arcade
+python3.10, newer versions are not compatible with arcade as of 1/11/2025
 
 ## Authors
 ---

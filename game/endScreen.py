@@ -16,4 +16,4 @@ class EndScreen(arcade.View):
         """ Draw this view """
         arcade.start_render()
         arcade.draw_text("The fire got you...\nYou have now joined the forest.", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2,
-                         arcade.color.WHITE, font_size=40, anchor_x="center")
+                         arcade.color.WHITE, font_size=30, anchor_x="center")

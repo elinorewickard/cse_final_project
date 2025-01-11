@@ -17,4 +17,3 @@ class WinScreen(arcade.View):
         arcade.start_render()
         arcade.draw_text("You got out!", c.SCREEN_WIDTH / 2, c.SCREEN_HEIGHT / 2,
                          arcade.color.WHITE, font_size=40, anchor_x="center")
-

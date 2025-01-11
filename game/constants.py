@@ -7,11 +7,11 @@ SCREEN_TITLE = "Wall of Flames"
 LAYER_WIDTH = 32
 
 # player constants
-GRAVITY = 1
+GRAVITY = 1 # was 1
 PLAYER_MOVEMENT_SPEED = 20
 PLAYER_JUMP_SPEED = 20
 SCALING = 3.0
-FIRE_MOVEMENT_SPEED = 13
+FIRE_MOVEMENT_SPEED = 11 # was 13
 
 # margin minimum between character and screen edge
 LEFT_VIEWPORT_MARGIN = 250
@@ -31,4 +31,3 @@ COIN_IMG = os.path.join(PATH, 'assets/berry.png')
 JUMP = os.path.join(PATH, 'assets/jump.wav')
 CRUNCH = os.path.join(PATH, 'assets/Crunch.wav')
 FIRE = os.path.join(PATH, 'assets/fire.wav')
-

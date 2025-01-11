@@ -19,6 +19,7 @@ class Startup(arcade.View):
       #arcade window setup
       arcade.set_background_color(arcade.csscolor.BLACK)
       arcade.set_background_color((200,100,50,100))
+      self.background_image = arcade.load_texture(c.BACKGR_IMG)
 
       
       self.score = 0
@@ -43,7 +44,7 @@ class Startup(arcade.View):
       self.layers.add_player(self.player)
 
       #setting up the different layers and adding the sprites to each
-      for layer in range(0,6):
+      for layer in range(6):
          for i in range(100):
             self.add_grass(i,layer)
             self.add_coin(i,layer)
@@ -61,7 +62,7 @@ class Startup(arcade.View):
    def add_fire(self,layer):
       """Adds fire sprite off of the screen with a rightward velocity."""
       self.fire = LayerSprite(c.FIRE_IMG, self.layer_scale(layer) * 4)
-      self.fire.left = -500
+      self.fire.left = -1000
       self.fire.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer)
       self.fire.velocity = (c.FIRE_MOVEMENT_SPEED,0)
       self.fire.layer = layer
@@ -70,15 +71,15 @@ class Startup(arcade.View):
       
    def add_tree(self, i, layer):
       """Adds tree sprite to the screen as blocks"""
-      self.tree = LayerSprite(c.TREE_IMG, self.layer_scale(3))
-      self.tree.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer) + 10
-      self.tree.left = 350 * i * self.layer_scale(layer)
+      self.tree = LayerSprite(c.TREE_IMG, self.layer_scale(layer))
+      self.tree.bottom = (layer) * (c.LAYER_WIDTH) * self.layer_scale(layer)
+      self.tree.left = 350 * i * self.layer_scale(layer) - 20
       self.tree.layer = layer
       self.layers.add_block(self.tree)
 
 
    def add_coin(self,i,layer):
-      """Adding coin sprites to the window"""
+      """Adding coin sprites to the window. In this game, they are actually berries <3"""
       self.coin = LayerSprite(c.COIN_IMG, self.layer_scale(layer)*.15)
       self.coin.bottom = (layer) * c.LAYER_WIDTH * self.layer_scale(layer) + 50
       self.coin.right = 400 * i * self.layer_scale(layer)
@@ -89,9 +90,10 @@ class Startup(arcade.View):
    def add_grass(self,i,layer):
       """Adds blocks to screen, currently it is grass."""
       self.grass = LayerSprite(c.GRASS_IMG, self.layer_scale(layer))
-      self.grass.set_hit_box(((-128,-32),(128,-32),(128,0),(128,0),(-128,0),(-128,0)))
+      #                       topleft,  top-right, bottom-right, bottom-left
+      self.grass.set_hit_box(((-128,-16),(128,-16),(128,16),(-128,16)))
       self.grass.center_x = 256 * i * self.layer_scale(layer)
-      self.grass.bottom = (layer-1) * c.LAYER_WIDTH * self.layer_scale(layer)
+      self.grass.bottom = (layer-.75) * c.LAYER_WIDTH * self.layer_scale(layer)
       self.grass.layer = layer
       self.layers.add_block(self.grass)
       
@@ -99,6 +101,7 @@ class Startup(arcade.View):
    def on_draw(self):
       """Render SCREEN."""
       arcade.start_render()
+      arcade.draw_texture_rectangle(c.SCREEN_WIDTH//2 + self.view_left, c.SCREEN_HEIGHT//2 + self.view_bottom, c.SCREEN_WIDTH, c.SCREEN_HEIGHT, self.background_image)
       master_list = self.layers.get_all_in_range(self.player.center_x)
       master_list.draw()
 
@@ -119,6 +122,7 @@ class Startup(arcade.View):
             block_list_on_layer = self.layers.get_list(self.player.layer, 'block')
                #get the list of blocks on the layer of the player, and prepare them for collision \/
             self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
+            arcade.play_sound(self.jump_sound)
 
       elif key == arcade.key.DOWN or key == arcade.key.S:
          if self.player.layer > 0:
@@ -126,18 +130,26 @@ class Startup(arcade.View):
             self.player._set_scale(self.layer_scale(self.player.layer))
             block_list_on_layer = self.layers.get_list(self.player.layer, 'block')
             self.physics_engine = arcade.PhysicsEnginePlatformer(self.player, block_list_on_layer, c.GRAVITY)
+            arcade.play_sound(self.jump_sound)
 
       elif key == arcade.key.LEFT or key == arcade.key.A:
-         self.player.change_x = -(c.PLAYER_MOVEMENT_SPEED-((self.player.center_x-200)/50)+(self.score*7))
+         self.move_player(False)
 
       elif key == arcade.key.RIGHT or key == arcade.key.D:
-         self.player.change_x = (c.PLAYER_MOVEMENT_SPEED-((self.player.center_x-200)/50)+(self.score*7))
+         self.move_player()
 
       elif arcade.key.SPACE:
-         if self.player.bottom < c.LAYER_WIDTH * self.player.layer + 100:
+         if self.player.change_y == 0:
             self.player.change_y = c.PLAYER_MOVEMENT_SPEED
             arcade.play_sound(self.jump_sound)
 
+   def move_player(self, go_right = True):
+      if go_right:
+         mult = 1
+      else:
+         mult = -1
+      # Must be 0 change at minimum and player-speed at max
+      self.player.change_x = mult * max(c.PLAYER_MOVEMENT_SPEED,min(0,(c.PLAYER_MOVEMENT_SPEED-((self.player.center_x-2000)/50)+(self.score*20))))
 
    def on_key_release(self, key, modifiers):
       """Called when the user releases a key."""
@@ -163,7 +175,10 @@ class Startup(arcade.View):
       for i in range(0,6):
          mob_list = self.layers.get_list(i,'mob')
          for sprite in mob_list:
-            sprite.center_x = int(sprite.center_x + sprite.change_x)
+            sprite.center_x = max(int(sprite.center_x + sprite.change_x),
+                                 self.player.left - 1000)
+            # Must never be more than 1500 units away from the player
+
 
       #when fire collision happens, end screen is pulled up
       self.current_enemy_layer = self.layers.get_list(self.player.layer,'mob')

@@ -14,3 +14,6 @@ class LayerSprite(Sprite):
     def pull_layer(self):
         if self.layer > 0:
             self.layer -= 1
+
+    def _set_scale(self, a):
+        self.scale = a
